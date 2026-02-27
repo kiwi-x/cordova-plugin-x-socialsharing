@@ -40,7 +40,7 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.naming.Context;
+// import javax.naming.Context;
 
 public class SocialSharing extends CordovaPlugin {
 
