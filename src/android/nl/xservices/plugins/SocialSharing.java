@@ -40,6 +40,8 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.naming.Context;
+
 public class SocialSharing extends CordovaPlugin {
 
   private static final String ACTION_AVAILABLE_EVENT = "available";
@@ -345,7 +347,12 @@ public class SocialSharing extends CordovaPlugin {
             if (peek) {
               callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
             } else {
-              sendIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+              if (Build.VERSION.SDK_INT < 33) {
+                // Android 13 blocks intents that don't match with the receiving app intent-filters
+                // In order to prevent ActivityNotFoundException the category is added to the intent only on Android 12L and 
+                // see: https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin/pull/1214
+                sendIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+              }
               sendIntent.setComponent(new ComponentName(activity.applicationInfo.packageName,
                   passedActivityName != null ? passedActivityName : activity.name));
 
